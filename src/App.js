@@ -223,7 +223,7 @@ function App() {
     setOpen(true);
   };
 
-  const convert = React.useCallback((str) => {
+  /*const convert = React.useCallback((str) => {
     var date = new Date(str);
     var mnth = ("0" + (date.getMonth() + 1)).slice(-2);
     var day = ("0" + date.getDate()).slice(-2);
@@ -232,7 +232,7 @@ function App() {
 
   const fechaIni = convert(state.fechaIni);
   const fechaFin = convert(state.fechaFin);
-  const params = `fechaIni=${fechaIni}&fechaFin=${fechaFin}`;
+  const params = `fechaIni=${fechaIni}&fechaFin=${fechaFin}`;*/
 
   const click = () => {
     if (state.algoritmo === 0) {

@@ -5,20 +5,27 @@
 
 .body {
   display: flex;
+  flex-direction: row;
   padding: 10px;
-  min-height: 100vh;
 }
 
 .drag-area {
   border: 5px dashed #ddd;
-  height: 200px;
-  width: 100%;
+  height: 150px;
+  width: 60%;
   border-radius: 5px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
 }
+
+.drag-area.active {
+  background-color: #b8d4fe;
+  color: black;
+  border: 2px dashed #618ac9;
+}
+
 .Box {
   height: 50;
   background-color: #fff9c6;
@@ -33,4 +40,29 @@
   .Box {
     height: 80;
   }
+}
+
+.file-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border: solid 1px #ddd;
+}
+
+.preview {
+  margin-top: 10px;
+  min-height: 100px;
+}
+
+.status-text {
+  padding: 0 10px;
+}
+.sucess {
+  padding: 0 10px;
+  color: #52ad5a;
+}
+
+.failure {
+  color: #ff0000;
 }
