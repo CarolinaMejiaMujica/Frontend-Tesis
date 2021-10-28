@@ -24,6 +24,46 @@ import Axios from "axios";
 import Cargando from "../espacio-temporal/cargando";
 import { visuallyHidden } from "@mui/utils";
 import TableSortLabel from "@mui/material/TableSortLabel";
+import { ButtonDelete, ButtonNo, ButtonSi } from "./boton";
+import ModalUnstyled from "@mui/core/ModalUnstyled";
+import CloseIcon from "@mui/icons-material/Close";
+import { styled } from "@mui/system";
+import CheckCircleOutlineRoundedIcon from "@mui/icons-material/CheckCircleOutlineRounded";
+import FadeLoader from "react-spinners/FadeLoader";
+
+const StyledModal = styled(ModalUnstyled)`
+  position: fixed;
+  z-index: 1300;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const Backdrop = styled("div")`
+  z-index: -1;
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  -webkit-tap-highlight-color: transparent;
+`;
+
+const style = {
+  width: 500,
+  bgcolor: "background.paper",
+  border: "0px solid #000",
+  paddingTop: "0px",
+  marginTop: "0px",
+  paddingBottom: "20px",
+  paddingLeft: "20px",
+  paddingRight: "20px",
+};
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -150,6 +190,21 @@ EnhancedTableHead.propTypes = {
 };
 
 const useStyles = makeStyles({
+  spinner: {
+    padding: "10px",
+    marginTop: "50px",
+    marginBottom: "50px",
+    align: "center",
+    textAlign: "center",
+    left: "0px",
+  },
+  grid1: {
+    marginTop: "5px",
+    align: "center",
+    textAlign: "center",
+    display: "flex",
+    flexDirection: "column",
+  },
   toolbar: {
     justifyContent: "space-between",
     alignItems: "center",
@@ -168,6 +223,7 @@ const useStyles = makeStyles({
   },
   bold: {
     fontWeight: 600,
+    padding: "10px",
   },
   bold1: {
     fontWeight: 600,
@@ -180,6 +236,22 @@ const useStyles = makeStyles({
   pagination: {
     paddingLeft: "800px",
   },
+  close: {
+    cursor: "pointer",
+  },
+  decision: {
+    marginTop: "20px",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  decision2: {
+    marginTop: "20px",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });
 
 const useStyles1 = makeStyles((theme) => ({
@@ -188,51 +260,6 @@ const useStyles1 = makeStyles((theme) => ({
     marginLeft: theme.spacing(2.5),
   },
 }));
-
-const EnhancedTableToolbar = (props) => {
-  const classes = useStyles();
-  const { numSelected } = props;
-
-  return (
-    <Toolbar
-      className={classes.toolbar}
-      sx={{
-        pl: { sm: 2 },
-        pr: { xs: 1, sm: 1 },
-        ...(numSelected > 0 && {
-          bgcolor: (theme) =>
-            alpha("#589AF6", theme.palette.action.activatedOpacity),
-        }),
-      }}
-    >
-      {numSelected > 0 ? (
-        <Typography
-          sx={{ flex: "1 1 100%" }}
-          color="inherit"
-          variant="subtitle1"
-          component="div"
-        >
-          {numSelected} seleccionados
-        </Typography>
-      ) : (
-        <Typography variant="h6" align="center" className={classes.bold}>
-          Datos de las secuencias genómicas SARS-CoV-2
-        </Typography>
-      )}
-      {numSelected > 0 && (
-        <Tooltip title="Eliminar">
-          <IconButton>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      )}
-    </Toolbar>
-  );
-};
-
-EnhancedTableToolbar.propTypes = {
-  numSelected: PropTypes.number.isRequired,
-};
 
 function TablePaginationActions(props) {
   const classes = useStyles1();
@@ -393,6 +420,57 @@ const Tabla = () => {
     requestSearch(searched);
   };
 
+  const [openModal, setOpenModal] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
+  const [openModalCargando, setOpenModalCargando] = React.useState(false);
+  const [description, setDescription] = React.useState("");
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleOpenModal = () => {
+    setOpenModal(true);
+  };
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+  const handleOpenModalCargando = () => {
+    setOpenModalCargando(true);
+  };
+  const handleCloseModalCargando = () => {
+    setOpenModalCargando(false);
+  };
+
+  const eliminar = () => {
+    handleOpen();
+  };
+
+  const deleteSecuencias = () => {
+    handleClose();
+    handleOpenModalCargando();
+    Axios.post(`http://localhost:8000/eliminar/`, selected)
+      .then((response) => {
+        const val1 = response.data;
+        console.log(val1);
+        if (val1[0] === true) {
+          setDescription("Se elimino correctamente las secuencias");
+          handleCloseModalCargando();
+          handleOpenModal();
+          setBandera(false);
+          setFilas(val1[1]);
+          setRows1(val1[1]);
+          setSelected([]);
+        } else {
+          setDescription("Hubo un problema al eliminar las secuencias");
+          handleOpenModal();
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
     <Grid item xs={12} sm={12}>
       <Typography variant="h5" align="center" className={classes.bold1}>
@@ -402,11 +480,43 @@ const Tabla = () => {
         <Box className={classes.paper2} boxShadow={0} height={620}>
           <SearchBar
             value={searched}
-            placeholder="Buscar por ID de la secuencias genómica SARS-CoV-2"
+            placeholder="Buscar por ID de acceso de la secuencia genómica SARS-CoV-2"
             onChange={(searchVal) => requestSearch(searchVal)}
             onCancelSearch={() => cancelSearch()}
           />
-          <EnhancedTableToolbar numSelected={selected.length} />
+          <Toolbar
+            className={classes.toolbar}
+            sx={{
+              pl: { sm: 2 },
+              pr: { xs: 1, sm: 1 },
+              ...(selected.length > 0 && {
+                bgcolor: (theme) =>
+                  alpha("#589AF6", theme.palette.action.activatedOpacity),
+              }),
+            }}
+          >
+            {selected.length > 0 ? (
+              <Typography
+                sx={{ flex: "1 1 100%" }}
+                color="inherit"
+                variant="subtitle1"
+                component="div"
+              >
+                {selected.length} seleccionados
+              </Typography>
+            ) : (
+              <Typography variant="h6" align="center" className={classes.bold}>
+                Datos de las secuencias genómicas SARS-CoV-2
+              </Typography>
+            )}
+            {selected.length > 0 && (
+              <Tooltip title="Eliminar">
+                <ButtonDelete onClick={eliminar}>
+                  <DeleteIcon />
+                </ButtonDelete>
+              </Tooltip>
+            )}
+          </Toolbar>
           {cargando && <Cargando />}
           {!cargando && (
             <TableContainer className={classes.container}>
@@ -491,6 +601,80 @@ const Tabla = () => {
         </Box>
       )}
       {bandera && <Box></Box>}
+      <StyledModal
+        aria-labelledby="unstyled-modal-title"
+        aria-describedby="unstyled-modal-description"
+        open={open}
+        onClose={handleClose}
+        BackdropComponent={Backdrop}
+      >
+        <Box sx={{ ...style }}>
+          <Grid container className={classes.decision}>
+            <Typography
+              id="modal-modal-title"
+              variant="h6"
+              component="h2"
+              className={classes.bold}
+            >
+              Confirmación
+            </Typography>
+            <CloseIcon onClick={handleClose} className={classes.close} />
+          </Grid>
+          <Typography
+            id="modal-modal-description"
+            sx={{ mt: 2 }}
+            className={classes.grid}
+          >
+            ¿Está seguro que desea eliminar las secuencias genómicas SARS-CoV-2
+            seleccionadas?
+          </Typography>
+          <Grid container className={classes.decision2}>
+            <ButtonSi onClick={deleteSecuencias}>Sí</ButtonSi>
+            <ButtonNo onClick={handleClose}>No</ButtonNo>
+          </Grid>
+        </Box>
+      </StyledModal>
+      <StyledModal
+        aria-labelledby="unstyled-modal-title"
+        aria-describedby="unstyled-modal-description"
+        open={openModal}
+        BackdropComponent={Backdrop}
+      >
+        <Box sx={{ ...style }}>
+          <Grid container className={classes.decision2}>
+            <CheckCircleOutlineRoundedIcon color="success" fontSize="large" />
+            <Typography variant="h6" className={classes.bold}>
+              {description}
+            </Typography>
+            <ButtonNo onClick={handleCloseModal}>Cerrar</ButtonNo>
+          </Grid>
+        </Box>
+      </StyledModal>
+      <StyledModal
+        aria-labelledby="unstyled-modal-title"
+        aria-describedby="unstyled-modal-description"
+        open={openModalCargando}
+        BackdropComponent={Backdrop}
+      >
+        <Box sx={{ ...style }}>
+          <div className={classes.grid1}>
+            <div className={classes.spinner}>
+              <FadeLoader
+                className={classes.spinner}
+                color="#003E97"
+                radius={20}
+                height={15}
+                width={5}
+                heightUnit={0}
+                margin="2px"
+              />
+            </div>
+            <Typography variant="h6" className={classes.bold}>
+              Eliminando las secuencias genómicas SARS-CoV-2
+            </Typography>
+          </div>
+        </Box>
+      </StyledModal>
     </Grid>
   );
 };
