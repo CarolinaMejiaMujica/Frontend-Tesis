@@ -264,9 +264,14 @@ const Importar = () => {
         for (let index = 0; index < archivos.length; index++) {
           formData.append("archivos", archivos[index]);
         }
-        await Axios.post("http://127.0.0.1:8000/online/", formData, {
-          headers: { "Content-type": "multipart/form-data" },
-        })
+        const params = value === "sinagrupamiento" ? 0 : 1;
+        await Axios.post(
+          `http://127.0.0.1:8000/online/?parametro=${params}`,
+          formData,
+          {
+            headers: { "Content-type": "multipart/form-data" },
+          }
+        )
           .then((response) => {
             console.log(response.data);
             handleCloseModalCargando();
