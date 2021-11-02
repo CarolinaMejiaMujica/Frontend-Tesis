@@ -143,7 +143,7 @@ function App() {
     "Wed Mar 05 2020 20:51:01 GMT-0500"
   );
   const [finDate, setFinDate] = React.useState(
-    "Wed Sep 01 2021 20:00:01 GMT-0500"
+    "Mon Nov 01 2021 20:00:01 GMT-0500"
   );
   const [algoritmo, setAlgoritmo] = React.useState(0);
   const [open, setOpen] = React.useState(false);
@@ -299,13 +299,11 @@ function App() {
           {stateImportar && (
             <NavBtnLink to="/importar">Importar Datos</NavBtnLink>
           )}
-          {!stateImportar && (
-            <NavBtnLink to="/graficos">Ver gráficos</NavBtnLink>
-          )}
+          {!stateImportar && <NavBtnLink to="/">Ver gráficos</NavBtnLink>}
         </NavBtn>
       </Nav>
       <Switch>
-        <Route path="/graficos">
+        <Route path="/">
           <section className="contenido wrapper">
             <Grid item xs={12} sm={12}>
               <Box className={classes.paper2} boxShadow={0}>
@@ -330,7 +328,7 @@ function App() {
                         <KeyboardDatePicker
                           disableToolbar
                           minDate={"2020-03-06"}
-                          maxDate={"2021-09-02"}
+                          maxDate={"2021-11-02"}
                           style={{ margin: "0%" }}
                           inputProps={{
                             min: 0,
@@ -359,7 +357,7 @@ function App() {
                         <KeyboardDatePicker
                           disableToolbar
                           minDate={"2020-03-05"}
-                          maxDate={"2021-09-02"}
+                          maxDate={"2021-11-02"}
                           style={{ margin: "0%" }}
                           variant="inline"
                           format="dd/MM/yyyy"

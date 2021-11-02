@@ -25,6 +25,7 @@ import { Btn } from "../tabla/descargarboton";
 import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
 import Slider from "@mui/material/Slider";
+import dendrog from "./dendrograma.png";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -70,16 +71,23 @@ const useStyles = makeStyles((theme) => ({
     margin: "20px",
   },
   slider: {
-    width: "600px",
+    marginLeft: "20px",
   },
   p: {
-    marginBottom: "10px",
+    marginRight: "20px",
   },
   pagination: {
     paddingLeft: "800px",
   },
   container: {
     maxHeight: 440,
+  },
+  image: {
+    paddingTop: "20px",
+    width: "95%",
+    height: 500,
+    justifyContent: "center",
+    alignItems: "center",
   },
 }));
 
@@ -210,7 +218,6 @@ const Agrupamientojerarquico = ({ estado, jerarquico }) => {
   const fechaIni = convert(estado.fechaIni);
   const fechaFin = convert(estado.fechaFin);
   const deps = estado.departamentos;
-  //const params = `fechaIni=${fechaIni}&fechaFin=${fechaFin}&parametro=${6}`;
 
   const [datos, setDatos] = React.useState([]);
   const [cargando, setCargando] = React.useState(true);
@@ -225,7 +232,7 @@ const Agrupamientojerarquico = ({ estado, jerarquico }) => {
 
   const grafJerarquico = () => {
     setCargando(true);
-    const params = `fechaIni=${fechaIni}&fechaFin=${fechaFin}&parametro=${6}`;
+    const params = `fechaIni=${fechaIni}&fechaFin=${fechaFin}&parametro=${value}`;
     Axios.post(`http://localhost:8000/graficojerarquico/?${params}`, deps)
       .then((response) => {
         const val1 = response.data;
@@ -251,41 +258,39 @@ const Agrupamientojerarquico = ({ estado, jerarquico }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [jerarquico, value]);
 
-  /*const [dendrograma, setDendrograma] = React.useState({
-    isLoaded: false,
-    content: "a",
-  });
-  const [cargandodendrograma, setCargandodendrograma] = React.useState(true);
-  const payload = {};*/
+  //const { myHtml, setMyHtml } = React.useState("");
 
-  /*if (props.estado.valor === 1) {
-    const fechaIni = convert(props.estado.fechaIni);
-    const fechaFin = convert(props.estado.fechaFin);
-    const deps = props.estado.departamentos;
-    const params = `fechaIni=${fechaIni}&fechaFin=${fechaFin}&parametro=${6}`;
+  const grafDendrograma = () => {
     setCargando(true);
-    Axios.post(`http://localhost:8000/graficojerarquico/?${params}`, deps)
+    const params = `fechaIni=${fechaIni}&fechaFin=${fechaFin}`;
+    Axios.post(`http://localhost:8000/dendrograma/?${params}`, deps)
       .then((response) => {
+        //const extractScriptRegex = /<script\b[^>]*>([\s\S]*?)<\/script>/gim;
+        //let scriptsExtracted;
         const val1 = response.data;
+        console.log(response.data);
         if (val1 === "No hay datos") {
           setBandera(true);
         } else {
           setBandera(false);
-          const item = JSON.parse(val1[0]);
-          setDatos(val1[1]);
-          window.Bokeh.embed.embed_item(item, "graficojerarquico");
+          /*while ((scriptsExtracted = extractScriptRegex.exec(response.data))) {
+            val1 = val1.replace(scriptsExtracted[0], "");
+            window.eval(scriptsExtracted[1]);
+          }*/
+          //setMyHtml(val1);
           setCargando(false);
         }
       })
-      .catch((err) => console.log(err));
-  }*/
+      .catch((err) => {
+        console.log(err);
+      });
+    // eslint-disable-next-line
+  };
 
-  /*const [state, setState] = React.useState({ x: 6 });
-  function range() {}
-  const updateRange = (x) => {
-    setState(x);
-    console.log(x);
-  };*/
+  React.useEffect(() => {
+    grafDendrograma();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [jerarquico]);
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -325,7 +330,7 @@ const Agrupamientojerarquico = ({ estado, jerarquico }) => {
                 Jerárquico
               </Typography>
               <Grid container>
-                <Grid item xs={6} sm={6} className={classes.grid}>
+                <Grid item xs={6} sm={7} className={classes.grid}>
                   <Typography
                     variant="subtitle1"
                     align="left"
@@ -364,7 +369,7 @@ const Agrupamientojerarquico = ({ estado, jerarquico }) => {
                     ></Jerarquico>
                   )}
                 </Grid>
-                <Grid item xs={6} sm={6} className={classes.grid2}>
+                <Grid item xs={6} sm={5} className={classes.grid2}>
                   <Typography
                     variant="subtitle1"
                     align="left"
@@ -372,6 +377,11 @@ const Agrupamientojerarquico = ({ estado, jerarquico }) => {
                   >
                     Dendrograma
                   </Typography>
+                  <img
+                    src={dendrog}
+                    alt="dendrograma"
+                    className={classes.image}
+                  />
                 </Grid>
               </Grid>
             </Box>

@@ -74,7 +74,7 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "20px",
   },
   p: {
-    marginRight: "10px",
+    marginRight: "20px",
   },
   pagination: {
     paddingLeft: "800px",
