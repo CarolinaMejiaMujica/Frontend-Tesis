@@ -228,7 +228,7 @@ const Agrupamientokmeans = ({ estado, kmeans }) => {
   const grafkmeans = () => {
     setCargando(true);
     const params = `fechaIni=${fechaIni}&fechaFin=${fechaFin}&parametro=${value}`;
-    Axios.post(`http://localhost:8000/graficokmeans/?${params}`, deps)
+    Axios.post(`http://3.89.243.126/graficokmeans/?${params}`, deps)
       .then((response) => {
         const val1 = response.data;
         if (val1 === "No hay datos") {
@@ -249,7 +249,6 @@ const Agrupamientokmeans = ({ estado, kmeans }) => {
 
   React.useEffect(() => {
     grafkmeans();
-    console.log(value);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [kmeans, value]);
 

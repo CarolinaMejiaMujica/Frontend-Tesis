@@ -233,7 +233,7 @@ const Agrupamientojerarquico = ({ estado, jerarquico }) => {
   const grafJerarquico = () => {
     setCargando(true);
     const params = `fechaIni=${fechaIni}&fechaFin=${fechaFin}&parametro=${value}`;
-    Axios.post(`http://localhost:8000/graficojerarquico/?${params}`, deps)
+    Axios.post(`http://3.89.243.126/graficojerarquico/?${params}`, deps)
       .then((response) => {
         const val1 = response.data;
         if (val1 === "No hay datos") {
@@ -254,7 +254,6 @@ const Agrupamientojerarquico = ({ estado, jerarquico }) => {
 
   React.useEffect(() => {
     grafJerarquico();
-    console.log(value);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [jerarquico, value]);
 
@@ -263,12 +262,11 @@ const Agrupamientojerarquico = ({ estado, jerarquico }) => {
   const grafDendrograma = () => {
     setCargando(true);
     const params = `fechaIni=${fechaIni}&fechaFin=${fechaFin}`;
-    Axios.post(`http://localhost:8000/dendrograma/?${params}`, deps)
+    Axios.post(`http://3.89.243.126/dendrograma/?${params}`, deps)
       .then((response) => {
         //const extractScriptRegex = /<script\b[^>]*>([\s\S]*?)<\/script>/gim;
         //let scriptsExtracted;
         const val1 = response.data;
-        console.log(response.data);
         if (val1 === "No hay datos") {
           setBandera(true);
         } else {

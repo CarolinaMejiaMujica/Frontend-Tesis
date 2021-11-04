@@ -250,7 +250,6 @@ const Importar = () => {
     setArchivos([]);
   };
   const uploadFile = async () => {
-    console.log(archivos);
     if (archivos === undefined) {
       setDescription("Debe subir un archivo .FASTA y .TSV");
       setTextButton("Subir archivos");
@@ -266,14 +265,13 @@ const Importar = () => {
         }
         const params = value === "sinagrupamiento" ? 0 : 1;
         await Axios.post(
-          `http://127.0.0.1:8000/online/?parametro=${params}`,
+          `http://3.89.243.126/online/?parametro=${params}`,
           formData,
           {
             headers: { "Content-type": "multipart/form-data" },
           }
         )
           .then((response) => {
-            console.log(response.data);
             handleCloseModalCargando();
             handleOpenModalListo();
           })
@@ -325,7 +323,7 @@ const Importar = () => {
   };
   const handleCloseModalListo = () => {
     setOpenModalListo(false);
-    window.location = "http://localhost:3000/graficos";
+    window.location = "http://3.89.243.126/graficos";
   };
 
   return (

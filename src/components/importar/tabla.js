@@ -344,7 +344,7 @@ const Tabla = () => {
   const [bandera, setBandera] = React.useState(false);
 
   React.useEffect(() => {
-    Axios.post(`http://localhost:8000/tabla/`)
+    Axios.post(`http://3.89.243.126/tabla/`)
       .then((response) => {
         const val1 = response.data;
         if (val1 === "No hay datos") {
@@ -451,10 +451,9 @@ const Tabla = () => {
   const deleteSecuencias = () => {
     handleClose();
     handleOpenModalCargando();
-    Axios.post(`http://localhost:8000/eliminar/`, selected)
+    Axios.post(`http://3.89.243.126/eliminar/`, selected)
       .then((response) => {
         const val1 = response.data;
-        console.log(val1);
         if (val1[0] === true) {
           setDescription("Se elimino correctamente las secuencias");
           handleCloseModalCargando();

@@ -2,7 +2,12 @@ import React from "react";
 import "./App.css";
 import { Helmet } from "react-helmet";
 import EspacioTiempo from "./components/espacio-temporal";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
 import Tabla from "./components/tabla";
 import Agrupamientokmeans from "./components/agrupamiento-kmeans";
 import Agrupamientojerarquico from "./components/agrupamiento-jerarquico";
@@ -264,7 +269,7 @@ function App() {
 
   const boton = () => {
     setStateImportar(stateImportar ? false : true);
-    console.log(stateImportar);
+    //console.log(stateImportar);
   };
 
   return (
@@ -299,11 +304,14 @@ function App() {
           {stateImportar && (
             <NavBtnLink to="/importar">Importar Datos</NavBtnLink>
           )}
-          {!stateImportar && <NavBtnLink to="/">Ver gráficos</NavBtnLink>}
+          {!stateImportar && (
+            <NavBtnLink to="/graficos">Ver gráficos</NavBtnLink>
+          )}
         </NavBtn>
       </Nav>
       <Switch>
-        <Route path="/">
+        <Route exact path="/" render={() => <Redirect to="/graficos" />} />
+        <Route path="/graficos">
           <section className="contenido wrapper">
             <Grid item xs={12} sm={12}>
               <Box className={classes.paper2} boxShadow={0}>
