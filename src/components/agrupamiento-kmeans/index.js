@@ -108,7 +108,7 @@ const columns = [
   },
   {
     id: "cluster",
-    label: "N° Cluster",
+    label: "N° de cluster",
     minWidth: 170,
     align: "center",
     background: "#FFFFFF",
@@ -228,7 +228,7 @@ const Agrupamientokmeans = ({ estado, kmeans }) => {
   const grafkmeans = () => {
     setCargando(true);
     const params = `fechaIni=${fechaIni}&fechaFin=${fechaFin}&parametro=${value}`;
-    Axios.post(`http://3.89.243.126/graficokmeans/?${params}`, deps)
+    Axios.post(`http://127.0.0.1:8000/graficokmeans/?${params}`, deps)
       .then((response) => {
         const val1 = response.data;
         if (val1 === "No hay datos") {
@@ -356,9 +356,9 @@ const Agrupamientokmeans = ({ estado, kmeans }) => {
                       <Table stickyHeader aria-label="sticky table">
                         <TableHead>
                           <TableRow>
-                            {columns.map((column) => (
+                            {columns.map((column, index) => (
                               <TableCell
-                                key={column.id}
+                                key={index}
                                 align={column.align}
                                 style={{ minWidth: column.minWidth }}
                               >

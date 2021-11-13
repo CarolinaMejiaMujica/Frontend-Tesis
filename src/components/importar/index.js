@@ -148,10 +148,6 @@ const Importar = () => {
 
   const inputFileRef = React.useRef(null);
   const preview = React.useRef(null);
-  const fooBarRef = React.useRef(null);
-  const fooBarNode = fooBarRef.current;
-  const text = React.useRef(null);
-  const textArrastra = text.current;
   const [archivos, setArchivos] = React.useState([]);
   let variable = "";
 
@@ -159,43 +155,18 @@ const Importar = () => {
     inputFileRef.current.click();
   };
 
-  const handleDragOver = (e) => {
-    e.preventDefault();
-    fooBarNode.classList.add("active");
-    textArrastra.textContent = "suelta para subir los archivos";
-    e.stopPropagation();
-  };
-  const handleDragLeave = (e) => {
-    e.preventDefault();
-    fooBarNode.classList.remove("active");
-    textArrastra.textContent = "o arrastra y suelta los archivos acá";
-    e.stopPropagation();
-  };
-  const handleDrop = (e) => {
-    e.preventDefault();
-    variable = e.dataTransfer.files;
-    let newList;
-    if (variable.length === 1) {
-      newList = archivos.concat(variable[0]);
-    } else {
-      newList = e.dataTransfer.files;
-    }
-    setArchivos(newList);
-    showFiles(variable);
-    fooBarNode.classList.remove("active");
-    textArrastra.textContent = "o arrastra y suelta los archivos acá";
-    e.stopPropagation();
-  };
-
   const onFileChange = (e) => {
     variable = e.target.files;
     let newList;
     if (variable.length === 1) {
       newList = archivos.concat(variable[0]);
+      setArchivos(newList);
     } else {
-      newList = e.target.files;
+      for (const f of variable) {
+        newList = archivos.concat(f);
+        setArchivos(newList);
+      }
     }
-    setArchivos(newList);
     showFiles(variable);
   };
 
@@ -235,6 +206,7 @@ const Importar = () => {
       });
       fileReader.readAsDataURL(file);
     } else {
+      archivos.pop();
       setDescription("El archivo no es válido");
       setTextButton("Subir archivos");
       handleOpenModal();
@@ -250,6 +222,7 @@ const Importar = () => {
     setArchivos([]);
   };
   const uploadFile = async () => {
+    console.log(archivos);
     if (archivos === undefined) {
       setDescription("Debe subir un archivo .FASTA y .TSV");
       setTextButton("Subir archivos");
@@ -265,7 +238,7 @@ const Importar = () => {
         }
         const params = value === "sinagrupamiento" ? 0 : 1;
         await Axios.post(
-          `http://3.89.243.126/online/?parametro=${params}`,
+          `http://127.0.0.1:8000/online/?parametro=${params}`,
           formData,
           {
             headers: { "Content-type": "multipart/form-data" },
@@ -280,7 +253,7 @@ const Importar = () => {
             handleCloseModalCargando();
           });
       } else if (archivos.length === 1) {
-        setDescription("Faltar subir un archivo");
+        setDescription("Falta subir un archivo");
         setTextButton("Subir archivos");
         handleClose();
         handleOpenModal();
@@ -323,7 +296,8 @@ const Importar = () => {
   };
   const handleCloseModalListo = () => {
     setOpenModalListo(false);
-    window.location = "http://3.89.243.126/graficos";
+    window.location =
+      "http://analisissecuenciasgenomicassarscov2.com.s3-website-us-east-1.amazonaws.com/graficos";
   };
 
   return (
@@ -357,13 +331,7 @@ const Importar = () => {
           </Grid>
           <Grid item xs={7}>
             <div className="body">
-              <div
-                className="drag-area"
-                ref={fooBarRef}
-                onDrop={(e) => handleDrop(e)}
-                onDragLeave={(e) => handleDragLeave(e)}
-                onDragOver={(e) => handleDragOver(e)}
-              >
+              <div className="drag-area">
                 <FileUploadIcon
                   className={classes.upload}
                   sx={{ fontSize: 45 }}
@@ -371,13 +339,11 @@ const Importar = () => {
                 <ButtonPrimary onClick={click}>
                   Selecciona tus archivos
                 </ButtonPrimary>
-                <p ref={text}>o arrastra y suelta los archivos acá</p>
                 <input
                   type="file"
                   ref={inputFileRef}
                   onChange={onFileChange}
                   hidden
-                  multiple
                   accept=".FASTA, .tsv"
                 />
               </div>

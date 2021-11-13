@@ -5,7 +5,6 @@ import { Typography } from "@material-ui/core";
 import { Jerarquico } from "./graficos";
 import Axios from "axios";
 import Cargando from "./cargando";
-//import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -25,7 +24,6 @@ import { Btn } from "../tabla/descargarboton";
 import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
 import Slider from "@mui/material/Slider";
-import dendrog from "./dendrograma.png";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -85,7 +83,6 @@ const useStyles = makeStyles((theme) => ({
   image: {
     paddingTop: "20px",
     width: "95%",
-    height: 500,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -115,7 +112,7 @@ const columns = [
   },
   {
     id: "cluster",
-    label: "N° Cluster",
+    label: "N° de cluster",
     minWidth: 170,
     align: "center",
     background: "#FFFFFF",
@@ -233,7 +230,7 @@ const Agrupamientojerarquico = ({ estado, jerarquico }) => {
   const grafJerarquico = () => {
     setCargando(true);
     const params = `fechaIni=${fechaIni}&fechaFin=${fechaFin}&parametro=${value}`;
-    Axios.post(`http://3.89.243.126/graficojerarquico/?${params}`, deps)
+    Axios.post(`http://127.0.0.1:8000/graficojerarquico/?${params}`, deps)
       .then((response) => {
         const val1 = response.data;
         if (val1 === "No hay datos") {
@@ -257,25 +254,33 @@ const Agrupamientojerarquico = ({ estado, jerarquico }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [jerarquico, value]);
 
-  //const { myHtml, setMyHtml } = React.useState("");
+  const [url, setUrl] = React.useState("");
 
   const grafDendrograma = () => {
     setCargando(true);
     const params = `fechaIni=${fechaIni}&fechaFin=${fechaFin}`;
-    Axios.post(`http://3.89.243.126/dendrograma/?${params}`, deps)
+
+    Axios.post(`http://127.0.0.1:8000/dendrograma/?${params}`, deps)
       .then((response) => {
-        //const extractScriptRegex = /<script\b[^>]*>([\s\S]*?)<\/script>/gim;
-        //let scriptsExtracted;
         const val1 = response.data;
         if (val1 === "No hay datos") {
           setBandera(true);
         } else {
           setBandera(false);
-          /*while ((scriptsExtracted = extractScriptRegex.exec(response.data))) {
-            val1 = val1.replace(scriptsExtracted[0], "");
-            window.eval(scriptsExtracted[1]);
-          }*/
-          //setMyHtml(val1);
+          var params2 = { Bucket: "dendrograma", Key: "dendrograma.png" };
+          const aws = require("aws-sdk");
+          aws.config.setPromisesDependency();
+          aws.config.update({
+            accessKeyId: "ASIAQIMIDAYLIAIJRBIL",
+            secretAccessKey: "vjgDk5H3jn/F1XXexLV7QmYrj5J6ixn5PF7WylPx",
+            sessionToken:
+              "FwoGZXIvYXdzEJj//////////wEaDJdI37aw9RJ4l7oC4CLJAVZZs7wb9n+y4VVRZa+4Cvj9wE6lsYvLotoBYOrgxzogHeW0AkWdBjEkGV3NqKMTvmtS8TO4wJYgY2KfXd31yO2tqzYuheKVSNM5AawoD9MeEG+gAFMNRuTTzQyFJ/HcqnT5XnHgNL0EYHjB1wT4vIYcZv4fDX3NNupxA0XfR1cr2XknID+B+QZ2DYdPYz64DHdm4o4OryNkszt6B3E/Hm+mE1WUXDyDmPts1ckkRd097mJqLlVQnNg69020v3OayQLPGpq7mBjuqiiSxL2MBjItG7OAX5e+3U2sn8SQk1CBffj6zkjjnuh37KJrI/YMGWPUY8Q45JOZYlqlCEov",
+            region: "us-east-1",
+          });
+          const s3 = new aws.S3();
+          var url_s3 = s3.getSignedUrl("getObject", params2);
+          console.log("The URL is", url_s3);
+          setUrl(url_s3);
           setCargando(false);
         }
       })
@@ -375,11 +380,11 @@ const Agrupamientojerarquico = ({ estado, jerarquico }) => {
                   >
                     Dendrograma
                   </Typography>
-                  <img
-                    src={dendrog}
-                    alt="dendrograma"
-                    className={classes.image}
-                  />
+                  <p>
+                    Se muestra una representación gráfica de las distancias
+                    entre las secuencias genómicas SARS-CoV-2 en un dendrograma.
+                  </p>
+                  <img src={url} alt="dendrograma" className={classes.image} />
                 </Grid>
               </Grid>
             </Box>
@@ -403,7 +408,7 @@ const Agrupamientojerarquico = ({ estado, jerarquico }) => {
             </Grid>
             <p className={classes.p}>
               Se muestra la información de las secuencias genómicas agrupadas
-              con el algoritmo k-means en el gráfico de la izquierda.
+              con el algoritmo jerárquico en el gráfico superior.
             </p>
             {cargando && <Cargando />}
             {!cargando && (

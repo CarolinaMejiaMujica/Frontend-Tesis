@@ -12,7 +12,7 @@ import Tabla from "./components/tabla";
 import Agrupamientokmeans from "./components/agrupamiento-kmeans";
 import Agrupamientojerarquico from "./components/agrupamiento-jerarquico";
 import Agrupamientodbscan from "./components/agrupamiento-dbscan";
-import Importar from "./components/importar";
+import Login from "./components/login";
 import DateFnsUtils from "@date-io/date-fns";
 import { makeStyles } from "@material-ui/core/styles";
 import Select from "@material-ui/core/Select";
@@ -145,10 +145,10 @@ function App() {
   ];
 
   const [inicioDate, setInicioDate] = React.useState(
-    "Wed Mar 05 2020 20:51:01 GMT-0500"
+    "Mon Apr 06 2020 20:51:01 GMT-0500"
   );
   const [finDate, setFinDate] = React.useState(
-    "Mon Nov 01 2021 20:00:01 GMT-0500"
+    "Fri Oct 15 2021 20:00:01 GMT-0500"
   );
   const [algoritmo, setAlgoritmo] = React.useState(0);
   const [open, setOpen] = React.useState(false);
@@ -186,7 +186,6 @@ function App() {
       if (name === "Todos") {
         setisDisabled(true);
         nombreDepartamentos.push(name);
-        //setNombreDepartamentos(departamentos);
         return;
       }
       nombreDepartamentos.push(name);
@@ -227,17 +226,6 @@ function App() {
   const handleOpen = () => {
     setOpen(true);
   };
-
-  /*const convert = React.useCallback((str) => {
-    var date = new Date(str);
-    var mnth = ("0" + (date.getMonth() + 1)).slice(-2);
-    var day = ("0" + date.getDate()).slice(-2);
-    return [date.getFullYear(), mnth, day].join("-");
-  }, []);
-
-  const fechaIni = convert(state.fechaIni);
-  const fechaFin = convert(state.fechaFin);
-  const params = `fechaIni=${fechaIni}&fechaFin=${fechaFin}`;*/
 
   const click = () => {
     if (state.algoritmo === 0) {
@@ -282,7 +270,7 @@ function App() {
           <Typography variant="h5" noWrap className={classes.bold}>
             Análisis de Secuencias Genómicas SARS-CoV-2 Perú
           </Typography>
-          <NavLink>Actualizado el 01/09/2021</NavLink>
+          <NavLink>Actualizado el 15/10/2021</NavLink>
           <NavDatos>
             {" "}
             Facilitado por datos de
@@ -301,9 +289,7 @@ function App() {
           </NavDatos>
         </NavMenu>
         <NavBtn onClick={boton}>
-          {stateImportar && (
-            <NavBtnLink to="/importar">Importar Datos</NavBtnLink>
-          )}
+          {stateImportar && <NavBtnLink to="/login">Importar Datos</NavBtnLink>}
           {!stateImportar && (
             <NavBtnLink to="/graficos">Ver gráficos</NavBtnLink>
           )}
@@ -311,6 +297,7 @@ function App() {
       </Nav>
       <Switch>
         <Route exact path="/" render={() => <Redirect to="/graficos" />} />
+        <Route exact path="/importar" render={() => <Redirect to="/login" />} />
         <Route path="/graficos">
           <section className="contenido wrapper">
             <Grid item xs={12} sm={12}>
@@ -335,8 +322,8 @@ function App() {
                         </Typography>
                         <KeyboardDatePicker
                           disableToolbar
-                          minDate={"2020-03-06"}
-                          maxDate={"2021-11-02"}
+                          minDate={"2020-04-07"}
+                          maxDate={"2021-10-16"}
                           style={{ margin: "0%" }}
                           inputProps={{
                             min: 0,
@@ -364,8 +351,8 @@ function App() {
                         </Typography>
                         <KeyboardDatePicker
                           disableToolbar
-                          minDate={"2020-03-05"}
-                          maxDate={"2021-11-02"}
+                          minDate={"2020-04-07"}
+                          maxDate={"2021-10-16"}
                           style={{ margin: "0%" }}
                           variant="inline"
                           format="dd/MM/yyyy"
@@ -418,6 +405,7 @@ function App() {
                     <Grid item xs={12}>
                       {departamentos.map((name) => (
                         <FormControlLabel
+                          key={name}
                           control={
                             <Checkbox
                               key={name}
@@ -462,9 +450,9 @@ function App() {
             )}
           </section>
         </Route>
-        <Route path="/importar">
+        <Route path="/login">
           <section className="contenido wrapper">
-            <Importar />
+            <Login />
           </section>
         </Route>
       </Switch>

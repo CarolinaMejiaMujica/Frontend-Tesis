@@ -27,7 +27,7 @@ const Navbar = () => {
         <Typography variant="h5" noWrap className={classes.bold}>
           Análisis de Secuencias Genómicas SARS-CoV-2 Perú
         </Typography>
-        <NavLink>Actualizado el 01/11/2021</NavLink>
+        <NavLink>Actualizado el 15/10/2021</NavLink>
         <NavDatos>
           {" "}
           Facilitado por datos de
