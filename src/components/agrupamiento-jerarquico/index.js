@@ -24,6 +24,7 @@ import { Btn } from "../tabla/descargarboton";
 import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
 import Slider from "@mui/material/Slider";
+import dendrograma from "./dendrograma.png";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -83,6 +84,7 @@ const useStyles = makeStyles((theme) => ({
   image: {
     paddingTop: "20px",
     width: "95%",
+    height: "600px",
     justifyContent: "center",
     alignItems: "center",
   },
@@ -230,7 +232,7 @@ const Agrupamientojerarquico = ({ estado, jerarquico }) => {
   const grafJerarquico = () => {
     setCargando(true);
     const params = `fechaIni=${fechaIni}&fechaFin=${fechaFin}&parametro=${value}`;
-    Axios.post(`http://127.0.0.1:8000/graficojerarquico/?${params}`, deps)
+    Axios.post(`http://3.86.154.241/graficojerarquico/?${params}`, deps)
       .then((response) => {
         const val1 = response.data;
         if (val1 === "No hay datos") {
@@ -254,20 +256,20 @@ const Agrupamientojerarquico = ({ estado, jerarquico }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [jerarquico, value]);
 
-  const [url, setUrl] = React.useState("");
+  //const [url, setUrl] = React.useState("");
 
   const grafDendrograma = () => {
     setCargando(true);
     const params = `fechaIni=${fechaIni}&fechaFin=${fechaFin}`;
 
-    Axios.post(`http://127.0.0.1:8000/dendrograma/?${params}`, deps)
+    Axios.post(`http://3.86.154.241/dendrograma/?${params}`, deps)
       .then((response) => {
         const val1 = response.data;
         if (val1 === "No hay datos") {
           setBandera(true);
         } else {
           setBandera(false);
-          var params2 = { Bucket: "dendrograma", Key: "dendrograma.png" };
+          /*var params2 = { Bucket: "dendrograma", Key: "dendrograma.png" };
           const aws = require("aws-sdk");
           aws.config.setPromisesDependency();
           aws.config.update({
@@ -279,8 +281,7 @@ const Agrupamientojerarquico = ({ estado, jerarquico }) => {
           });
           const s3 = new aws.S3();
           var url_s3 = s3.getSignedUrl("getObject", params2);
-          console.log("The URL is", url_s3);
-          setUrl(url_s3);
+          setUrl(url_s3);*/
           setCargando(false);
         }
       })
@@ -384,7 +385,11 @@ const Agrupamientojerarquico = ({ estado, jerarquico }) => {
                     Se muestra una representación gráfica de las distancias
                     entre las secuencias genómicas SARS-CoV-2 en un dendrograma.
                   </p>
-                  <img src={url} alt="dendrograma" className={classes.image} />
+                  <img
+                    src={dendrograma}
+                    alt="dendrograma"
+                    className={classes.image}
+                  />
                 </Grid>
               </Grid>
             </Box>

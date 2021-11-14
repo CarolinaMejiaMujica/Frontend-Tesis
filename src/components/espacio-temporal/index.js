@@ -120,29 +120,17 @@ const EspacioTiempo = ({ estado, grafico }) => {
     setCargandoCantidadAnalisis(true);
     setCargandoCantidadTotal(true);
 
-    Axios.post(`http://127.0.0.1:8000/cantidadanalisis/`).then((response) => {
+    Axios.post(`http://3.86.154.241/cantidades/`).then((response) => {
       const val1 = response.data;
-      setCantidadAnalisis(response.data);
-      if (val1 === "No hay datos") {
-        setBandera(true);
-      } else {
-        setBandera(false);
-        setCargandoCantidadAnalisis(false);
-      }
-    });
-    Axios.post(`http://127.0.0.1:8000/cantidadtotal/`).then((response) => {
-      const val1 = response.data;
-      setCantidadTotal(response.data);
-      if (val1 === "No hay datos") {
-        setBandera(true);
-      } else {
-        setBandera(false);
-        setCargandoCantidadTotal(false);
-      }
+      setCantidadAnalisis(val1["cantidadAnalisis"]);
+      setCantidadTotal(val1["cantidadTotal"]);
+      setBandera(false);
+      setCargandoCantidadAnalisis(false);
+      setCargandoCantidadTotal(false);
     });
 
     const params = `fechaIni=${fechaIni}&fechaFin=${fechaFin}`;
-    Axios.post(`http://127.0.0.1:8000/graficolineal/?${params}`, deps)
+    Axios.post(`http://3.86.154.241/graficolineal/?${params}`, deps)
       .then((response) => {
         const val1 = response.data;
         if (val1 === "No hay datos") {
@@ -157,7 +145,7 @@ const EspacioTiempo = ({ estado, grafico }) => {
         }
       })
       .catch((err) => console.log(err));
-    Axios.post(`http://127.0.0.1:8000/mapa/?${params}`, deps)
+    Axios.post(`http://3.86.154.241/mapa/?${params}`, deps)
       .then((response) => {
         const val1 = response.data;
         if (val1 === "No hay datos") {
@@ -172,7 +160,7 @@ const EspacioTiempo = ({ estado, grafico }) => {
         }
       })
       .catch((err) => console.log(err));
-    Axios.post(`http://127.0.0.1:8000/graficocircular/?${params}`, deps)
+    Axios.post(`http://3.86.154.241/graficocircular/?${params}`, deps)
       .then((response) => {
         const val1 = response.data;
         if (val1 === "No hay datos") {
@@ -262,7 +250,7 @@ const EspacioTiempo = ({ estado, grafico }) => {
                   align="center"
                   className={classes.bold}
                 >
-                  Porcentaje de variantes identificadas en el tiempo
+                  Distribución de secuencias genómicas SARS-CoV-2 por variantes
                 </Typography>
                 {cargandoCircular && <Cargando />}
                 {!cargandoCircular && (

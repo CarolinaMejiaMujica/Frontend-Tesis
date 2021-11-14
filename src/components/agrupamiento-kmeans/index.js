@@ -228,7 +228,7 @@ const Agrupamientokmeans = ({ estado, kmeans }) => {
   const grafkmeans = () => {
     setCargando(true);
     const params = `fechaIni=${fechaIni}&fechaFin=${fechaFin}&parametro=${value}`;
-    Axios.post(`http://127.0.0.1:8000/graficokmeans/?${params}`, deps)
+    Axios.post(`http://3.86.154.241/graficokmeans/?${params}`, deps)
       .then((response) => {
         const val1 = response.data;
         if (val1 === "No hay datos") {

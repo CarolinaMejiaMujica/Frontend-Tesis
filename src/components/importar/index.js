@@ -21,7 +21,17 @@ import ModalUnstyled from "@mui/core/ModalUnstyled";
 import { styled } from "@mui/system";
 import Cargando from "./cargando";
 import CheckCircleOutlineRoundedIcon from "@mui/icons-material/CheckCircleOutlineRounded";
+import {
+  Nav,
+  NavMenu,
+  NavBtn,
+  NavLink,
+  NavBtnLink,
+  NavDatos,
+} from "../Navbar/NavbarElements";
+import Cookies from "universal-cookie";
 
+const cookies = new Cookies();
 const StyledModal = styled(ModalUnstyled)`
   position: fixed;
   z-index: 1300;
@@ -57,6 +67,10 @@ const style = {
 };
 
 const useStyles = makeStyles((theme) => ({
+  boldNav: {
+    fontWeight: 800,
+    color: "white",
+  },
   close: {
     cursor: "pointer",
   },
@@ -140,6 +154,12 @@ const useStyles = makeStyles((theme) => ({
 const Importar = () => {
   const classes = useStyles();
 
+  React.useEffect(() => {
+    if (!cookies.get("nickname")) {
+      window.location.href = "./login";
+    }
+  }, []);
+
   const [value, setValue] = React.useState("sinagrupamiento");
 
   const handleChange = (event) => {
@@ -222,7 +242,6 @@ const Importar = () => {
     setArchivos([]);
   };
   const uploadFile = async () => {
-    console.log(archivos);
     if (archivos === undefined) {
       setDescription("Debe subir un archivo .FASTA y .TSV");
       setTextButton("Subir archivos");
@@ -238,7 +257,7 @@ const Importar = () => {
         }
         const params = value === "sinagrupamiento" ? 0 : 1;
         await Axios.post(
-          `http://127.0.0.1:8000/online/?parametro=${params}`,
+          `http://3.86.154.241/online/?parametro=${params}`,
           formData,
           {
             headers: { "Content-type": "multipart/form-data" },
@@ -296,197 +315,248 @@ const Importar = () => {
   };
   const handleCloseModalListo = () => {
     setOpenModalListo(false);
-    window.location =
-      "http://analisissecuenciasgenomicassarscov2.com.s3-website-us-east-1.amazonaws.com/graficos";
+    window.location.href = "./graficos";
+  };
+
+  const cerrarSesion = () => {
+    cookies.remove("nickname", { path: "/" });
+    window.location.href = "./graficos";
   };
 
   return (
-    <Grid item xs={12} sm={12}>
-      <Box className={classes.paper} boxShadow={0}>
-        <Typography variant="h5" align="center" className={classes.bold}>
-          Importar datos de las secuencias genómicas SARS-CoV-2
-        </Typography>
-        <Box className="Box" boxShadow={0}>
-          <InfoIcon className={classes.info} sx={{ fontSize: 30 }}></InfoIcon>
-          <Typography
-            variant="subtitle1"
-            align="center"
-            className={classes.infoTitle}
-          >
-            Los datos importados serán almacenados en una base de datos y se
-            realizará un procesamiento de estos datos para el respectivo
-            análisis de secuencias genómicas SARS-CoV-2.
+    <div>
+      <Nav fixed="top">
+        <NavMenu>
+          <Typography variant="h5" noWrap className={classes.boldNav}>
+            Análisis de Secuencias Genómicas SARS-CoV-2 Perú
           </Typography>
-        </Box>
-        <Grid container className={classes.subir}>
-          <Grid item xs={5}>
-            <Typography variant="h6" className={classes.bold}>
-              Subir archivo .FASTA y .TSV
+          <NavLink>Actualizado el 15/10/2021</NavLink>
+          <NavDatos>
+            {" "}
+            Facilitado por datos de
+            <a
+              rel="noopener noreferrer"
+              href="https://www.gisaid.org"
+              target="_blank"
+            >
+              <img
+                src="https://www.gisaid.org/fileadmin/gisaid/img/schild.png"
+                alt="gisaid-logo"
+                width="60"
+              ></img>
+            </a>
+            .
+          </NavDatos>
+        </NavMenu>
+        <NavBtn onClick={cerrarSesion}>
+          <NavBtnLink to="/graficos">Cerrar sesión</NavBtnLink>
+        </NavBtn>
+      </Nav>
+      <section className="contenido wrapper">
+        <Grid item xs={12} sm={12}>
+          <Box className={classes.paper} boxShadow={0}>
+            <Typography variant="h5" align="center" className={classes.bold}>
+              Importar datos de las secuencias genómicas SARS-CoV-2
             </Typography>
-            <Typography variant="subtitle1" className={classes.grid}>
-              Subir el archivo .FASTA y el archivo .TSV que contiene todas las
-              secuencias genómicas SARS-CoV-2 del Perú a procesar, estos
-              archivos deben ser los obtenidos en la base de datos GISAID.
-            </Typography>
-          </Grid>
-          <Grid item xs={7}>
-            <div className="body">
-              <div className="drag-area">
-                <FileUploadIcon
-                  className={classes.upload}
-                  sx={{ fontSize: 45 }}
-                />
-                <ButtonPrimary onClick={click}>
-                  Selecciona tus archivos
-                </ButtonPrimary>
-                <input
-                  type="file"
-                  ref={inputFileRef}
-                  onChange={onFileChange}
-                  hidden
-                  accept=".FASTA, .tsv"
-                />
-              </div>
-              <div>
-                <div id="hola">
-                  <div className="preview" ref={preview}></div>
+            <Box className="Box" boxShadow={0}>
+              <InfoIcon
+                className={classes.info}
+                sx={{ fontSize: 30 }}
+              ></InfoIcon>
+              <Typography
+                variant="subtitle1"
+                align="center"
+                className={classes.infoTitle}
+              >
+                Los datos importados serán almacenados en una base de datos y se
+                realizará un procesamiento de estos datos para el respectivo
+                análisis de secuencias genómicas SARS-CoV-2.
+              </Typography>
+            </Box>
+            <Grid container className={classes.subir}>
+              <Grid item xs={5}>
+                <Typography variant="h6" className={classes.bold}>
+                  Subir archivo .FASTA y .TSV
+                </Typography>
+                <Typography variant="subtitle1" className={classes.grid}>
+                  Subir el archivo .FASTA y el archivo .TSV que contiene todas
+                  las secuencias genómicas SARS-CoV-2 del Perú a procesar, estos
+                  archivos deben ser los obtenidos en la base de datos GISAID.
+                </Typography>
+              </Grid>
+              <Grid item xs={7}>
+                <div className="body">
+                  <div className="drag-area">
+                    <FileUploadIcon
+                      className={classes.upload}
+                      sx={{ fontSize: 45 }}
+                    />
+                    <ButtonPrimary onClick={click}>
+                      Selecciona tus archivos
+                    </ButtonPrimary>
+                    <input
+                      type="file"
+                      ref={inputFileRef}
+                      onChange={onFileChange}
+                      hidden
+                      accept=".FASTA, .tsv"
+                    />
+                  </div>
+                  <div>
+                    <div id="hola">
+                      <div className="preview" ref={preview}></div>
+                    </div>
+                    <ButtonSecondary onClick={deleteFile}>
+                      Eliminar archivos
+                    </ButtonSecondary>
+                  </div>
                 </div>
-                <ButtonSecondary onClick={deleteFile}>
-                  Eliminar archivos
-                </ButtonSecondary>
-              </div>
-            </div>
-          </Grid>
-        </Grid>
-        <Typography variant="h6" className={classes.bold}>
-          Seleccionar una opción para el agrupamiento:
-        </Typography>
-        <RadioGroup
-          aria-label="gender"
-          name="controlled-radio-buttons-group"
-          value={value}
-          onChange={handleChange}
-        >
-          <Grid container className={classes.agrupamiento}>
-            <Grid item xs={6} className={classes.checkbox}>
-              <FormControlLabel
-                className={classes.p}
-                value="agrupamiento"
-                control={<Radio />}
-                label="Realizar el agrupamiento de todas las secuencias genómicas
+              </Grid>
+            </Grid>
+            <Typography variant="h6" className={classes.bold}>
+              Seleccionar una opción para el agrupamiento:
+            </Typography>
+            <RadioGroup
+              aria-label="gender"
+              name="controlled-radio-buttons-group"
+              value={value}
+              onChange={handleChange}
+            >
+              <Grid container className={classes.agrupamiento}>
+                <Grid item xs={6} className={classes.checkbox}>
+                  <FormControlLabel
+                    className={classes.p}
+                    value="agrupamiento"
+                    control={<Radio />}
+                    label="Realizar el agrupamiento de todas las secuencias genómicas
               SARS-CoV-2 nuevamente, es decir, agrupar las nuevas
               secuencias agregadas con las anteriores registradas en el sistema.
             "
-              />
-            </Grid>
-            <Grid item xs={6} className={classes.checkbox}>
-              <FormControlLabel
-                className={classes.p}
-                value="sinagrupamiento"
-                control={<Radio />}
-                label="No realizar el agrupamiento con las nuevas secuencias agregadas,
+                  />
+                </Grid>
+                <Grid item xs={6} className={classes.checkbox}>
+                  <FormControlLabel
+                    className={classes.p}
+                    value="sinagrupamiento"
+                    control={<Radio />}
+                    label="No realizar el agrupamiento con las nuevas secuencias agregadas,
               solo ubicarlas visualmente en los gráficos para una mayor comprensión, es decir, 
               que estas nuevas secuencias no pertenecerán a ningún cluster en específico."
-              />
-            </Grid>
-          </Grid>
-        </RadioGroup>
-        <div className={classes.botones}>
-          <ButtonImportar onClick={handleOpen}>Importar datos</ButtonImportar>
-          <StyledModal
-            aria-labelledby="unstyled-modal-title"
-            aria-describedby="unstyled-modal-description"
-            open={open}
-            onClose={handleClose}
-            BackdropComponent={Backdrop}
-          >
-            <Box sx={{ ...style }}>
-              <Grid container className={classes.decision}>
-                <Typography
-                  id="modal-modal-title"
-                  variant="h6"
-                  component="h2"
-                  className={classes.bold}
-                >
-                  Confirmación
-                </Typography>
-                <CloseIcon onClick={handleClose} className={classes.close} />
+                  />
+                </Grid>
               </Grid>
-              <Typography
-                id="modal-modal-description"
-                sx={{ mt: 2 }}
-                className={classes.grid}
+            </RadioGroup>
+            <div className={classes.botones}>
+              <ButtonImportar onClick={handleOpen}>
+                Importar datos
+              </ButtonImportar>
+              <StyledModal
+                aria-labelledby="unstyled-modal-title"
+                aria-describedby="unstyled-modal-description"
+                open={open}
+                onClose={handleClose}
+                BackdropComponent={Backdrop}
               >
-                ¿Está seguro que desea importar nuevos datos de secuencias
-                genómicas SARS-CoV-2?
-              </Typography>
-              <Grid container className={classes.decision2}>
-                <ButtonSi onClick={uploadFile}>Sí</ButtonSi>
-                <ButtonNo onClick={handleClose}>No</ButtonNo>
-              </Grid>
-            </Box>
-          </StyledModal>
-        </div>
-        <StyledModal
-          aria-labelledby="unstyled-modal-title"
-          aria-describedby="unstyled-modal-description"
-          open={openModal}
-          onClose={handleCloseModal}
-          BackdropComponent={Backdrop}
-        >
-          <Box sx={{ ...style }}>
-            <Grid container className={classes.decision}>
-              <Typography
-                id="modal-modal-title"
-                variant="h6"
-                component="h2"
-                className={classes.bold}
-              >
-                Mensaje
-              </Typography>
-              <CloseIcon onClick={handleCloseModal} className={classes.close} />
-            </Grid>
-            <Typography
-              id="modal-modal-description"
-              sx={{ mt: 2 }}
-              className={classes.grid}
+                <Box sx={{ ...style }}>
+                  <Grid container className={classes.decision}>
+                    <Typography
+                      id="modal-modal-title"
+                      variant="h6"
+                      component="h2"
+                      className={classes.bold}
+                    >
+                      Confirmación
+                    </Typography>
+                    <CloseIcon
+                      onClick={handleClose}
+                      className={classes.close}
+                    />
+                  </Grid>
+                  <Typography
+                    id="modal-modal-description"
+                    sx={{ mt: 2 }}
+                    className={classes.grid}
+                  >
+                    ¿Está seguro que desea importar nuevos datos de secuencias
+                    genómicas SARS-CoV-2?
+                  </Typography>
+                  <Grid container className={classes.decision2}>
+                    <ButtonSi onClick={uploadFile}>Sí</ButtonSi>
+                    <ButtonNo onClick={handleClose}>No</ButtonNo>
+                  </Grid>
+                </Box>
+              </StyledModal>
+            </div>
+            <StyledModal
+              aria-labelledby="unstyled-modal-title"
+              aria-describedby="unstyled-modal-description"
+              open={openModal}
+              onClose={handleCloseModal}
+              BackdropComponent={Backdrop}
             >
-              {description}
-            </Typography>
-            <Grid container className={classes.decision2}>
-              <ButtonNo onClick={handleCloseModal}>{textButton}</ButtonNo>
-            </Grid>
+              <Box sx={{ ...style }}>
+                <Grid container className={classes.decision}>
+                  <Typography
+                    id="modal-modal-title"
+                    variant="h6"
+                    component="h2"
+                    className={classes.bold}
+                  >
+                    Mensaje
+                  </Typography>
+                  <CloseIcon
+                    onClick={handleCloseModal}
+                    className={classes.close}
+                  />
+                </Grid>
+                <Typography
+                  id="modal-modal-description"
+                  sx={{ mt: 2 }}
+                  className={classes.grid}
+                >
+                  {description}
+                </Typography>
+                <Grid container className={classes.decision2}>
+                  <ButtonNo onClick={handleCloseModal}>{textButton}</ButtonNo>
+                </Grid>
+              </Box>
+            </StyledModal>
+            <StyledModal
+              aria-labelledby="unstyled-modal-title"
+              aria-describedby="unstyled-modal-description"
+              open={openModalCargando}
+              BackdropComponent={Backdrop}
+            >
+              <Box sx={{ ...style }}>
+                <Cargando />
+              </Box>
+            </StyledModal>
+            <StyledModal
+              aria-labelledby="unstyled-modal-title"
+              aria-describedby="unstyled-modal-description"
+              open={openModalListo}
+              BackdropComponent={Backdrop}
+            >
+              <Box sx={{ ...style }}>
+                <Grid container className={classes.decision2}>
+                  <CheckCircleOutlineRoundedIcon
+                    color="success"
+                    fontSize="large"
+                  />
+                  <Typography variant="h6" className={classes.bold}>
+                    Preprocesamiento listo
+                  </Typography>
+                  <ButtonNo onClick={handleCloseModalListo}>
+                    Ver gráficos
+                  </ButtonNo>
+                </Grid>
+              </Box>
+            </StyledModal>
+            <Tabla />
           </Box>
-        </StyledModal>
-        <StyledModal
-          aria-labelledby="unstyled-modal-title"
-          aria-describedby="unstyled-modal-description"
-          open={openModalCargando}
-          BackdropComponent={Backdrop}
-        >
-          <Box sx={{ ...style }}>
-            <Cargando />
-          </Box>
-        </StyledModal>
-        <StyledModal
-          aria-labelledby="unstyled-modal-title"
-          aria-describedby="unstyled-modal-description"
-          open={openModalListo}
-          BackdropComponent={Backdrop}
-        >
-          <Box sx={{ ...style }}>
-            <Grid container className={classes.decision2}>
-              <CheckCircleOutlineRoundedIcon color="success" fontSize="large" />
-              <Typography variant="h6" className={classes.bold}>
-                Preprocesamiento listo
-              </Typography>
-              <ButtonNo onClick={handleCloseModalListo}>Ver gráficos</ButtonNo>
-            </Grid>
-          </Box>
-        </StyledModal>
-        <Tabla />
-      </Box>
-    </Grid>
+        </Grid>
+      </section>
+    </div>
   );
 };
 
