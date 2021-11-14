@@ -256,7 +256,7 @@ const Agrupamientojerarquico = ({ estado, jerarquico }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [jerarquico, value]);
 
-  //const [url, setUrl] = React.useState("");
+  const [url, setUrl] = React.useState("");
 
   const grafDendrograma = () => {
     setCargando(true);
@@ -269,7 +269,7 @@ const Agrupamientojerarquico = ({ estado, jerarquico }) => {
           setBandera(true);
         } else {
           setBandera(false);
-          /*var params2 = { Bucket: "dendrograma", Key: "dendrograma.png" };
+          var params2 = { Bucket: "dendrograma", Key: "dendrograma.png" };
           const aws = require("aws-sdk");
           aws.config.setPromisesDependency();
           aws.config.update({
@@ -281,7 +281,7 @@ const Agrupamientojerarquico = ({ estado, jerarquico }) => {
           });
           const s3 = new aws.S3();
           var url_s3 = s3.getSignedUrl("getObject", params2);
-          setUrl(url_s3);*/
+          setUrl(url_s3);
           setCargando(false);
         }
       })
