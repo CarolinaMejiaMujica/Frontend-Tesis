@@ -1,13 +1,8 @@
 import React from "react";
 import "./App.css";
-import { Helmet } from "react-helmet";
+import { Helmet, HelmetProvider } from "react-helmet-async";
 import EspacioTiempo from "./components/espacio-temporal";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Redirect,
-} from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Tabla from "./components/tabla";
 import Agrupamientokmeans from "./components/agrupamiento-kmeans";
 import Agrupamientojerarquico from "./components/agrupamiento-jerarquico";
@@ -18,15 +13,23 @@ import DateFnsUtils from "@date-io/date-fns";
 import { makeStyles } from "@material-ui/core/styles";
 import Select from "@material-ui/core/Select";
 import deLocale from "date-fns/locale/es";
-import { Box, Container, Grid, MenuItem } from "@material-ui/core";
+import {
+  Box,
+  Container,
+  Grid,
+  MenuItem,
+  Checkbox,
+  TextField,
+  Typography,
+  FormControl,
+} from "@material-ui/core";
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from "@material-ui/pickers";
-import { Typography, FormControl } from "@material-ui/core";
-import Checkbox from "@mui/material/Checkbox";
-import TextField from "@mui/material/TextField";
-import Autocomplete from "@mui/material/Autocomplete";
+//import Checkbox from "@material/checkbox";
+//import TextField from "@material/textfield";
+import { Autocomplete } from "@mui/material";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import { NavBtnGenerar, Button } from "./components/espacio-temporal/botones";
@@ -246,246 +249,255 @@ function App() {
   };
 
   return (
-    <Router>
-      <Helmet>
-        <style>{"body { background-color: #F6F7FF; }"}</style>
-      </Helmet>
-      <Switch>
-        <Route exact path="/" render={() => <Redirect to="/graficos" />} />
-        <Route path="/graficos">
-          <Nav fixed="top">
-            <NavMenu>
-              <Typography variant="h5" noWrap className={classes.bold}>
-                Análisis de Secuencias Genómicas SARS-CoV-2 Perú
-              </Typography>
-              <NavLink>Actualizado el 15/10/2021</NavLink>
-              <NavDatos>
-                {" "}
-                Facilitado por datos de
-                <a
-                  rel="noopener noreferrer"
-                  href="https://www.gisaid.org"
-                  target="_blank"
-                >
-                  <img
-                    src="https://www.gisaid.org/fileadmin/gisaid/img/schild.png"
-                    alt="gisaid-logo"
-                    width="60"
-                  ></img>
-                </a>
-                .
-              </NavDatos>
-            </NavMenu>
-            <NavBtn onClick={boton}>
-              <NavBtnLink to="/login">Importar Datos</NavBtnLink>
-            </NavBtn>
-          </Nav>
-          <section className="contenido wrapper">
-            <Grid item xs={12} sm={12}>
-              <Box className={classes.paper2} boxShadow={0}>
-                <Container maxWidth={false}>
-                  <MuiPickersUtilsProvider
-                    utils={DateFnsUtils}
-                    locale={deLocale}
-                  >
-                    <Grid
-                      container
-                      justifyContent="space-around"
-                      alignItems="stretch"
-                    >
-                      <FormControl className={classes.formControl}>
-                        <Typography
-                          variant="subtitle2"
-                          htmlFor="name"
-                          align="left"
-                        >
-                          Fecha Inicio
-                        </Typography>
-                        <KeyboardDatePicker
-                          disableToolbar
-                          minDate={"2020-04-07"}
-                          maxDate={"2021-10-16"}
-                          style={{ margin: "0%" }}
-                          inputProps={{
-                            min: 0,
-                            style: { textAlign: "center" },
-                          }}
-                          variant="inline"
-                          format="dd/MM/yyyy"
-                          margin="normal"
-                          id="fecha-inicio"
-                          width="100%"
-                          value={inicioDate}
-                          onChange={handleInicioDateChange}
-                          KeyboardButtonProps={{
-                            "roboto-label": "change date",
-                          }}
-                        />
-                      </FormControl>
-                      <FormControl className={classes.formControl}>
-                        <Typography
-                          variant="subtitle2"
-                          htmlFor="name"
-                          align="left"
-                        >
-                          Fecha Fin
-                        </Typography>
-                        <KeyboardDatePicker
-                          disableToolbar
-                          minDate={"2020-04-07"}
-                          maxDate={"2021-10-16"}
-                          style={{ margin: "0%" }}
-                          variant="inline"
-                          format="dd/MM/yyyy"
-                          inputProps={{
-                            min: 0,
-                            style: { textAlign: "center" },
-                          }}
-                          margin="normal"
-                          id="fecha-fin"
-                          value={finDate}
-                          onChange={handleFinDateChange}
-                          KeyboardButtonProps={{
-                            "roboto-label": "change date",
-                          }}
-                        />
-                      </FormControl>
-                      <FormControl className={classes.formControl}>
-                        <Typography variant="subtitle2" htmlFor="name">
-                          Algoritmo de agrupamiento
-                        </Typography>
-                        <Select
-                          id="algoritmo-select"
-                          name="name"
-                          open={open}
-                          onClose={handleClose}
-                          onOpen={handleOpen}
-                          value={algoritmo}
-                          onChange={handleChange}
-                        >
-                          {options.map((item, i) => (
-                            <MenuItem key={"algoritmo" + i} value={i}>
-                              {item.nombre}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                      <NavBtnGenerar>
-                        <Button onClick={click}>Generar</Button>
-                      </NavBtnGenerar>
-                    </Grid>
-                  </MuiPickersUtilsProvider>
-                  <Typography
-                    variant="subtitle2"
-                    gutterBottom
-                    className={classes.subtitle2}
-                  >
-                    Departamentos:
+    <BrowserRouter>
+      <HelmetProvider>
+        <Helmet>
+          <style>{"body { background-color: #F6F7FF; }"}</style>
+        </Helmet>
+      </HelmetProvider>
+      <Routes>
+        <Route exact path="/" element={<Navigate to="/graficos" />} />
+        <Route
+          path="/graficos"
+          element={
+            <>
+              <Nav fixed="top">
+                <NavMenu>
+                  <Typography variant="h5" noWrap className={classes.bold}>
+                    Análisis de Secuencias Genómicas SARS-CoV-2 Perú
                   </Typography>
-                  <Grid
-                    container
-                    justifyContent="space-around"
-                    alignItems="center"
-                  >
-                    <Grid item xs={12}>
-                      <Autocomplete
-                        value={state.departamentos}
-                        id="departamentos"
-                        multiple
-                        options={departamentos}
-                        disableCloseOnSelect
-                        getOptionLabel={(option) => option}
-                        onChange={(event, newValue) => {
-                          if (
-                            newValue.includes("Todos") &&
-                            departamentosCompleto === true
-                          ) {
-                            var index = newValue.indexOf("Todos");
-                            if (index !== -1) {
-                              newValue.splice(index, 1);
-                            }
-                            setState({
-                              fechaIni: state.fechaIni,
-                              fechaFin: state.fechaFin,
-                              algoritmo: state.algoritmo,
-                              departamentos: newValue,
-                            });
-                          } else if (
-                            newValue.includes("Todos") &&
-                            departamentosCompleto === false
-                          ) {
-                            setState({
-                              fechaIni: state.fechaIni,
-                              fechaFin: state.fechaFin,
-                              algoritmo: state.algoritmo,
-                              departamentos: departamentos,
-                            });
-                            setDepartamentosCompleto(true);
-                          } else if (newValue.length === 0) {
-                            setState({
-                              fechaIni: state.fechaIni,
-                              fechaFin: state.fechaFin,
-                              algoritmo: state.algoritmo,
-                              departamentos: [],
-                            });
-                            setDepartamentosCompleto(false);
-                          } else {
-                            setState({
-                              fechaIni: state.fechaIni,
-                              fechaFin: state.fechaFin,
-                              algoritmo: state.algoritmo,
-                              departamentos: newValue,
-                            });
-                            setDepartamentosCompleto(false);
-                          }
-                        }}
-                        renderOption={(props, option, { selected }) => (
-                          <li {...props}>
-                            <Checkbox
-                              icon={icon}
-                              checkedIcon={checkedIcon}
-                              style={{ marginRight: 8 }}
-                              checked={selected}
+                  <NavLink>Actualizado el 15/10/2021</NavLink>
+                  <NavDatos>
+                    {" "}
+                    Facilitado por datos de
+                    <a
+                      rel="noopener noreferrer"
+                      href="https://www.gisaid.org"
+                      target="_blank"
+                    >
+                      <img
+                        src="https://www.gisaid.org/fileadmin/gisaid/img/schild.png"
+                        alt="gisaid-logo"
+                        width="60"
+                      ></img>
+                    </a>
+                    .
+                  </NavDatos>
+                </NavMenu>
+                <NavBtn onClick={boton}>
+                  <NavBtnLink to="/login">Importar Datos</NavBtnLink>
+                </NavBtn>
+              </Nav>
+              <section className="contenido wrapper">
+                <Grid item xs={12} sm={12}>
+                  <Box className={classes.paper2} boxShadow={0}>
+                    <Container maxWidth={false}>
+                      <MuiPickersUtilsProvider
+                        utils={DateFnsUtils}
+                        locale={deLocale}
+                      >
+                        <Grid
+                          container
+                          justifyContent="space-around"
+                          alignItems="stretch"
+                        >
+                          <FormControl className={classes.formControl}>
+                            <Typography
+                              variant="subtitle2"
+                              htmlFor="name"
+                              align="left"
+                            >
+                              Fecha Inicio
+                            </Typography>
+                            <KeyboardDatePicker
+                              disableToolbar
+                              minDate={"2020-04-07"}
+                              maxDate={"2021-10-16"}
+                              style={{ margin: "0%" }}
+                              inputProps={{
+                                min: 0,
+                                style: { textAlign: "center" },
+                              }}
+                              variant="inline"
+                              format="dd/MM/yyyy"
+                              margin="normal"
+                              id="fecha-inicio"
+                              width="100%"
+                              value={inicioDate}
+                              onChange={handleInicioDateChange}
+                              KeyboardButtonProps={{
+                                "roboto-label": "change date",
+                              }}
                             />
-                            {option}
-                          </li>
-                        )}
-                        style={{
-                          width: "100%",
-                          paddingTop: 10,
-                          paddingBottom: 10,
-                        }}
-                        renderInput={(params) => (
-                          <TextField {...params} placeholder="Departamento" />
-                        )}
-                      />
-                    </Grid>
-                  </Grid>
-                </Container>
-              </Box>
-            </Grid>
+                          </FormControl>
+                          <FormControl className={classes.formControl}>
+                            <Typography
+                              variant="subtitle2"
+                              htmlFor="name"
+                              align="left"
+                            >
+                              Fecha Fin
+                            </Typography>
+                            <KeyboardDatePicker
+                              disableToolbar
+                              minDate={"2020-04-07"}
+                              maxDate={"2021-10-16"}
+                              style={{ margin: "0%" }}
+                              variant="inline"
+                              format="dd/MM/yyyy"
+                              inputProps={{
+                                min: 0,
+                                style: { textAlign: "center" },
+                              }}
+                              margin="normal"
+                              id="fecha-fin"
+                              value={finDate}
+                              onChange={handleFinDateChange}
+                              KeyboardButtonProps={{
+                                "roboto-label": "change date",
+                              }}
+                            />
+                          </FormControl>
+                          <FormControl className={classes.formControl}>
+                            <Typography variant="subtitle2" htmlFor="name">
+                              Algoritmo de agrupamiento
+                            </Typography>
+                            <Select
+                              id="algoritmo-select"
+                              name="name"
+                              open={open}
+                              onClose={handleClose}
+                              onOpen={handleOpen}
+                              value={algoritmo}
+                              onChange={handleChange}
+                            >
+                              {options.map((item, i) => (
+                                <MenuItem key={"algoritmo" + i} value={i}>
+                                  {item.nombre}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </FormControl>
+                          <NavBtnGenerar>
+                            <Button onClick={click}>Generar</Button>
+                          </NavBtnGenerar>
+                        </Grid>
+                      </MuiPickersUtilsProvider>
+                      <Typography
+                        variant="subtitle2"
+                        gutterBottom
+                        className={classes.subtitle2}
+                      >
+                        Departamentos:
+                      </Typography>
+                      <Grid
+                        container
+                        justifyContent="space-around"
+                        alignItems="center"
+                      >
+                        <Grid item xs={12}>
+                          <Autocomplete
+                            value={state.departamentos}
+                            id="departamentos"
+                            multiple
+                            options={departamentos}
+                            disableCloseOnSelect
+                            getOptionLabel={(option) => option}
+                            onChange={(event, newValue) => {
+                              if (
+                                newValue.includes("Todos") &&
+                                departamentosCompleto === true
+                              ) {
+                                var index = newValue.indexOf("Todos");
+                                if (index !== -1) {
+                                  newValue.splice(index, 1);
+                                }
+                                setState({
+                                  fechaIni: state.fechaIni,
+                                  fechaFin: state.fechaFin,
+                                  algoritmo: state.algoritmo,
+                                  departamentos: newValue,
+                                });
+                              } else if (
+                                newValue.includes("Todos") &&
+                                departamentosCompleto === false
+                              ) {
+                                setState({
+                                  fechaIni: state.fechaIni,
+                                  fechaFin: state.fechaFin,
+                                  algoritmo: state.algoritmo,
+                                  departamentos: departamentos,
+                                });
+                                setDepartamentosCompleto(true);
+                              } else if (newValue.length === 0) {
+                                setState({
+                                  fechaIni: state.fechaIni,
+                                  fechaFin: state.fechaFin,
+                                  algoritmo: state.algoritmo,
+                                  departamentos: [],
+                                });
+                                setDepartamentosCompleto(false);
+                              } else {
+                                setState({
+                                  fechaIni: state.fechaIni,
+                                  fechaFin: state.fechaFin,
+                                  algoritmo: state.algoritmo,
+                                  departamentos: newValue,
+                                });
+                                setDepartamentosCompleto(false);
+                              }
+                            }}
+                            renderOption={(props, option, { selected }) => (
+                              <li {...props}>
+                                <Checkbox
+                                  icon={icon}
+                                  checkedIcon={checkedIcon}
+                                  style={{ marginRight: 8 }}
+                                  checked={selected}
+                                />
+                                {option}
+                              </li>
+                            )}
+                            style={{
+                              width: "100%",
+                              paddingTop: 10,
+                              paddingBottom: 10,
+                            }}
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                placeholder="Departamento"
+                              />
+                            )}
+                          />
+                        </Grid>
+                      </Grid>
+                    </Container>
+                  </Box>
+                </Grid>
 
-            <EspacioTiempo estado={state} grafico={graficos} />
-            <Tabla estado={state} tabla={tabla}></Tabla>
-            {mostrarkmeans && (
-              <Agrupamientokmeans estado={state} kmeans={kmeans} />
-            )}
-            {mostrarjerarquico && (
-              <Agrupamientojerarquico estado={state} jerarquico={jerarquico} />
-            )}
-            {mostrardbscan && (
-              <Agrupamientodbscan estado={state} dbscan={dbscan} />
-            )}
-          </section>
-        </Route>
-        <Route path="/login">
-          <Login />
-        </Route>
-        <Route path="/importar">
-          <Importar />
-        </Route>
-      </Switch>
-    </Router>
+                <EspacioTiempo estado={state} grafico={graficos} />
+                <Tabla estado={state} tabla={tabla}></Tabla>
+                {mostrarkmeans && (
+                  <Agrupamientokmeans estado={state} kmeans={kmeans} />
+                )}
+                {mostrarjerarquico && (
+                  <Agrupamientojerarquico
+                    estado={state}
+                    jerarquico={jerarquico}
+                  />
+                )}
+                {mostrardbscan && (
+                  <Agrupamientodbscan estado={state} dbscan={dbscan} />
+                )}
+              </section>
+            </>
+          }
+        ></Route>
+        <Route path="/login/*" element={<Login />}></Route>
+        <Route path="/importar" element={<Importar />}></Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 

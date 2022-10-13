@@ -1,9 +1,9 @@
 {
-  "short_name": "Análisis de Secuencias Genómicas SARS-CoV-2 Perú",
+  "short_name": "Análisis de Secuencias Genómicas Covid-19",
   "name": "Análisis de Secuencias Genómicas SARS-CoV-2 Perú",
   "icons": [
     {
-      "src": "favicon.ico",
+      "src": "foto.ico",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     }

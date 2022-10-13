@@ -11,7 +11,7 @@ import PropTypes from "prop-types";
 import SearchBar from "material-ui-search-bar";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Toolbar from "@mui/material/Toolbar";
-import Checkbox from "@mui/material/Checkbox";
+import { Checkbox } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -344,7 +344,7 @@ const Tabla = () => {
   const [bandera, setBandera] = React.useState(false);
 
   React.useEffect(() => {
-    Axios.post(`http://3.86.154.241/tabla/`)
+    Axios.post(`http://localhost:8000/tabla/`)
       .then((response) => {
         const val1 = response.data;
         if (val1 === "No hay datos") {
@@ -447,11 +447,16 @@ const Tabla = () => {
   const eliminar = () => {
     handleOpen();
   };
+  const override = {
+    padding: "5px",
+    display: "block",
+    margin: "0 auto",
+  };
 
   const deleteSecuencias = () => {
     handleClose();
     handleOpenModalCargando();
-    Axios.post(`http://3.86.154.241/eliminar/`, selected)
+    Axios.post(`http://localhost:8000/eliminar/`, selected)
       .then((response) => {
         const val1 = response.data;
         if (val1[0] === true) {
@@ -659,7 +664,7 @@ const Tabla = () => {
           <div className={classes.grid1}>
             <div className={classes.spinner}>
               <FadeLoader
-                className={classes.spinner}
+                cssOverride={override}
                 color="#003E97"
                 radius={20}
                 height={15}

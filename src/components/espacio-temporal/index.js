@@ -120,7 +120,7 @@ const EspacioTiempo = ({ estado, grafico }) => {
     setCargandoCantidadAnalisis(true);
     setCargandoCantidadTotal(true);
 
-    Axios.post(`http://3.86.154.241/cantidades/`).then((response) => {
+    Axios.post(`http://localhost:8000/cantidades/`).then((response) => {
       const val1 = response.data;
       setCantidadAnalisis(val1["cantidadAnalisis"]);
       setCantidadTotal(val1["cantidadTotal"]);
@@ -130,7 +130,7 @@ const EspacioTiempo = ({ estado, grafico }) => {
     });
 
     const params = `fechaIni=${fechaIni}&fechaFin=${fechaFin}`;
-    Axios.post(`http://3.86.154.241/graficolineal/?${params}`, deps)
+    Axios.post(`http://localhost:8000/graficolineal/?${params}`, deps)
       .then((response) => {
         const val1 = response.data;
         if (val1 === "No hay datos") {
@@ -145,7 +145,7 @@ const EspacioTiempo = ({ estado, grafico }) => {
         }
       })
       .catch((err) => console.log(err));
-    Axios.post(`http://3.86.154.241/mapa/?${params}`, deps)
+    Axios.post(`http://localhost:8000/mapa/?${params}`, deps)
       .then((response) => {
         const val1 = response.data;
         if (val1 === "No hay datos") {
@@ -160,7 +160,7 @@ const EspacioTiempo = ({ estado, grafico }) => {
         }
       })
       .catch((err) => console.log(err));
-    Axios.post(`http://3.86.154.241/graficocircular/?${params}`, deps)
+    Axios.post(`http://localhost:8000/graficocircular/?${params}`, deps)
       .then((response) => {
         const val1 = response.data;
         if (val1 === "No hay datos") {

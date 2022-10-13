@@ -26,13 +26,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const override = {
+  padding: "5px",
+  display: "block",
+  margin: "0 auto",
+};
+
 export default function Cargando() {
   const classes = useStyles();
   return (
     <div className={classes.grid}>
       <div className={classes.spinner}>
         <FadeLoader
-          className={classes.spinner}
+          cssOverride={override}
           color="#003E97"
           radius={20}
           height={15}

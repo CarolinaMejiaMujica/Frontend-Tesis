@@ -12,13 +12,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const override = {
+  padding: "5px",
+  display: "block",
+  margin: "0 auto",
+};
+
 export default function CargandoCantidad() {
   const classes = useStyles();
   return (
     <div className={classes.spinner}>
       <FadeLoader
-        className={classes.spinner}
         color="#003E97"
+        cssOverride={override}
         radius={15}
         height={15}
         width={5}

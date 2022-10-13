@@ -257,7 +257,7 @@ const Importar = () => {
         }
         const params = value === "sinagrupamiento" ? 0 : 1;
         await Axios.post(
-          `http://3.86.154.241/online/?parametro=${params}`,
+          `http://localhost:8000/online/?parametro=${params}`,
           formData,
           {
             headers: { "Content-type": "multipart/form-data" },
