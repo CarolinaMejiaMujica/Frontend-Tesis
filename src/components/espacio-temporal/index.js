@@ -140,8 +140,8 @@ const EspacioTiempo = ({ estado, grafico }) => {
           const item = JSON.parse(val1);
           const element = document.getElementById("graficolineal");
           if (element) element.removeChild(element.firstChild);
-          window.Bokeh.embed.embed_item(item, "graficolineal");
           setCargandoLineal(false);
+          window.Bokeh.embed.embed_item(item, "graficolineal");
         }
       })
       .catch((err) => console.log(err));
@@ -155,8 +155,8 @@ const EspacioTiempo = ({ estado, grafico }) => {
           const item = JSON.parse(val1);
           const element = document.getElementById("mapa");
           if (element) element.removeChild(element.firstChild);
-          window.Bokeh.embed.embed_item(item, "mapa");
           setCargandoMapa(false);
+          window.Bokeh.embed.embed_item(item, "mapa");
         }
       })
       .catch((err) => console.log(err));
@@ -170,8 +170,8 @@ const EspacioTiempo = ({ estado, grafico }) => {
           const item = JSON.parse(val1);
           const element = document.getElementById("graficocircular");
           if (element) element.removeChild(element.firstChild);
-          window.Bokeh.embed.embed_item(item, "graficocircular");
           setCargandoCircular(false);
+          window.Bokeh.embed.embed_item(item, "graficocircular");
         }
       })
       .catch((err) => console.log(err));

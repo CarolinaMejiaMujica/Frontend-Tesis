@@ -239,8 +239,8 @@ const Agrupamientokmeans = ({ estado, kmeans }) => {
           setDatos(val1[1]);
           const element = document.getElementById("graficokmeans");
           if (element) element.removeChild(element.firstChild);
-          window.Bokeh.embed.embed_item(item, "graficokmeans");
           setCargando(false);
+          window.Bokeh.embed.embed_item(item, "graficokmeans");
         }
       })
       .catch((err) => console.log(err));
