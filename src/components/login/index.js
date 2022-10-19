@@ -155,7 +155,7 @@ const Login = () => {
           <Typography variant="h5" noWrap className={classes.bold}>
             Análisis de Secuencias Genómicas SARS-CoV-2 Perú
           </Typography>
-          <NavLink>Actualizado el 15/10/2021</NavLink>
+          <NavLink>Actualizado el 20/01/2022</NavLink>
           <NavDatos>
             {" "}
             Facilitado por datos de

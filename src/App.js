@@ -157,10 +157,10 @@ function App() {
     React.useState(true);
 
   const [inicioDate, setInicioDate] = React.useState(
-    "Mon Apr 06 2020 20:51:01 GMT-0500"
+    "Thu Mar 05 2020 20:51:01 GMT-0500"
   );
   const [finDate, setFinDate] = React.useState(
-    "Fri Oct 15 2021 20:00:01 GMT-0500"
+    "Sun Dec 12 2021 20:00:01 GMT-0500"
   );
   const [algoritmo, setAlgoritmo] = React.useState(0);
   const [open, setOpen] = React.useState(false);
@@ -266,7 +266,7 @@ function App() {
                   <Typography variant="h5" noWrap className={classes.bold}>
                     Análisis de Secuencias Genómicas SARS-CoV-2 Perú
                   </Typography>
-                  <NavLink>Actualizado el 15/10/2021</NavLink>
+                  <NavLink>Actualizado el 20/01/2022</NavLink>
                   <NavDatos>
                     {" "}
                     Facilitado por datos de
@@ -311,8 +311,8 @@ function App() {
                             </Typography>
                             <KeyboardDatePicker
                               disableToolbar
-                              minDate={"2020-04-07"}
-                              maxDate={"2021-10-16"}
+                              minDate={"2020-03-06"}
+                              maxDate={"2021-12-13"}
                               style={{ margin: "0%" }}
                               inputProps={{
                                 min: 0,
@@ -340,8 +340,8 @@ function App() {
                             </Typography>
                             <KeyboardDatePicker
                               disableToolbar
-                              minDate={"2020-04-07"}
-                              maxDate={"2021-10-16"}
+                              minDate={"2020-03-06"}
+                              maxDate={"2021-12-13"}
                               style={{ margin: "0%" }}
                               variant="inline"
                               format="dd/MM/yyyy"
