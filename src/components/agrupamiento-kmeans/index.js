@@ -108,7 +108,7 @@ const columns = [
   },
   {
     id: "cluster",
-    label: "N° de cluster",
+    label: "N° de clúster",
     minWidth: 170,
     align: "center",
     background: "#FFFFFF",
@@ -126,7 +126,7 @@ const columns = [
 
 function valueLabelFormat(value) {
   let scaledValue = value;
-  return `${scaledValue} clusters`;
+  return `${scaledValue}`;
 }
 
 function TablePaginationActions(props) {
@@ -295,22 +295,22 @@ const Agrupamientokmeans = ({ estado, kmeans }) => {
                   align="left"
                   className={classes.bold}
                 >
-                  Filtro por clusters
+                  Filtro por clústeres
                 </Typography>
                 <p className={classes.p}>
                   Se puede utilizar el control deslizante para filtrar por
                   grupos. Deslizar el control deslizante hasta el número de
-                  grupo deseado para mostrar las secuencias genómicas que
-                  pertenecen a ese grupo.
+                  clúster o grupo deseado para mostrar las secuencias genómicas
+                  que pertenecen a ese grupo.
                 </p>
                 <Grid item xs={12} sm={10} className={classes.slider}>
                   <Typography id="non-linear-slider" gutterBottom>
-                    N° de cluster: {valueLabelFormat(value)}
+                    N° de clúster: {valueLabelFormat(value)}
                   </Typography>
                   <Slider
                     id="Slider"
                     value={value}
-                    min={2}
+                    min={3}
                     step={1}
                     max={6}
                     getAriaValueText={valueLabelFormat}

@@ -114,7 +114,7 @@ const columns = [
   },
   {
     id: "cluster",
-    label: "N° de cluster",
+    label: "N° de clúster",
     minWidth: 170,
     align: "center",
     background: "#FFFFFF",
@@ -132,7 +132,7 @@ const columns = [
 
 function valueLabelFormat(value) {
   let scaledValue = value;
-  return `${scaledValue} clusters`;
+  return `${scaledValue}`;
 }
 
 function TablePaginationActions(props) {
@@ -231,7 +231,6 @@ const Agrupamientojerarquico = ({ estado, jerarquico }) => {
 
   const grafJerarquico = () => {
     setCargando(true);
-    //3.86.154.241
     const params = `fechaIni=${fechaIni}&fechaFin=${fechaFin}&parametro=${value}`;
     Axios.post(`http://localhost:8000/graficojerarquico/?${params}`, deps)
       .then((response) => {
@@ -257,7 +256,7 @@ const Agrupamientojerarquico = ({ estado, jerarquico }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [jerarquico, value]);
 
-  /*const [url, setUrl] = React.useState("");
+  const [url, setUrl] = React.useState("");
 
   const grafDendrograma = () => {
     setCargando(true);
@@ -270,7 +269,7 @@ const Agrupamientojerarquico = ({ estado, jerarquico }) => {
           setBandera(true);
         } else {
           setBandera(false);
-          var params2 = { Bucket: "dendrograma", Key: "dendrograma.png" };
+          var params2 = { Bucket: "dendrograma", Key: url };
           const aws = require("aws-sdk");
           aws.config.setPromisesDependency();
           aws.config.update({
@@ -295,7 +294,7 @@ const Agrupamientojerarquico = ({ estado, jerarquico }) => {
   React.useEffect(() => {
     grafDendrograma();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [jerarquico]);*/
+  }, [jerarquico]);
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -341,17 +340,17 @@ const Agrupamientojerarquico = ({ estado, jerarquico }) => {
                     align="left"
                     className={classes.bold}
                   >
-                    Filtro por clusters
+                    Filtro por clústeres
                   </Typography>
                   <p>
                     Se puede utilizar el control deslizante para filtrar por
                     grupos. Deslizar el control deslizante hasta el número de
-                    clusters o grupos deseados para mostrar las secuencias
+                    clúster o grupo deseados para mostrar las secuencias
                     genómicas que pertenecen a ese grupo.
                   </p>
                   <Grid item xs={12} sm={10} className={classes.slider}>
                     <Typography id="non-linear-slider" gutterBottom>
-                      N° de cluster: {valueLabelFormat(value)}
+                      N° de clúster: {valueLabelFormat(value)}
                     </Typography>
                     <Slider
                       id="Slider"

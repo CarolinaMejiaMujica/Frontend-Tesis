@@ -441,7 +441,7 @@ const Importar = () => {
                     control={<Radio />}
                     label="No realizar el agrupamiento con las nuevas secuencias agregadas,
               solo ubicarlas visualmente en los gráficos para una mayor comprensión, es decir, 
-              que estas nuevas secuencias no pertenecerán a ningún cluster en específico."
+              que estas nuevas secuencias no pertenecerán a ningún clúster en específico."
                   />
                 </Grid>
               </Grid>

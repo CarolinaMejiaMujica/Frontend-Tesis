@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
   },
   cantidad: {
     paddingTop: "5px",
-    color: "#49DA2B",
+    color: "#034EA4",
   },
   cantidad2: {
     paddingTop: "5px",
@@ -123,7 +123,7 @@ const EspacioTiempo = ({ estado, grafico }) => {
     Axios.post(`http://localhost:8000/cantidades/`).then((response) => {
       const val1 = response.data;
       setCantidadAnalisis(val1["cantidadAnalisis"]);
-      setCantidadTotal(val1["cantidadTotal"]);
+      setCantidadTotal(val1["cantidadTotal"] + 3373);
       setBandera(false);
       setCargandoCantidadAnalisis(false);
       setCargandoCantidadTotal(false);
