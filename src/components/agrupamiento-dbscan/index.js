@@ -107,7 +107,7 @@ const columns = [
   },
   {
     id: "cluster",
-    label: "N° de cluster",
+    label: "N° de clúster",
     minWidth: 170,
     align: "center",
     background: "#FFFFFF",
@@ -293,18 +293,18 @@ const Agrupamientodbscan = ({ estado, dbscan }) => {
                   align="left"
                   className={classes.bold}
                 >
-                  Filtro por epsilon
+                  Filtro por épsilon
                 </Typography>
                 <p className={classes.p}>
                   Se puede utilizar el control deslizante para filtrar por el
-                  valor de epsilon. Deslizar el control deslizante hasta el
-                  valor de epsilon deseado para ajustar la densidad o separación
+                  valor de épsilon. Deslizar el control deslizante hasta el
+                  valor de épsilon deseado para ajustar la densidad o separación
                   de los puntos de las secuencias genómicas que pertenecen a
                   cada grupo.
                 </p>
                 <Grid item xs={12} sm={10} className={classes.slider}>
                   <Typography id="non-linear-slider" gutterBottom>
-                    Valor de epsilon: {valueLabelFormat(value)}
+                    Valor de épsilon: {valueLabelFormat(value)}
                   </Typography>
                   <Slider
                     id="Slider"
